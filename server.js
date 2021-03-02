@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+var request = require("request");
 var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("quick.db");
@@ -199,13 +200,12 @@ var getcountries = setInterval(async () => {
   console.log("Updated The Countries", result);
 }, 150000);
 
-var listener = app.listen(8080, function() {
-  console.log("Your app is listening on port " + 8080);
+var listener = app.listen(process.env.PORT, function() {
+  console.log("Your app is listening on port " + listener.address().port);
 });
 
 app.get("/all/", async function(req, res) {
   let all = await db.fetch("all");
-  console.log(all)
   res.send(all);
 });
 
