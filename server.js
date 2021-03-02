@@ -9,7 +9,7 @@ app.use(cors());
 
 app.use('/', express.static('www'));
 
-var getall = async () => {
+var getall = setInterval(async () => {
   let response;
   try {
     response = await axios.get("https://www.worldometers.info/coronavirus/");
@@ -38,9 +38,9 @@ var getall = async () => {
     }
   });
 
+  db.set("all", result);
   console.log("Updated The Cases", result);
-  return result;
-};
+}, 150000);
 
 var getcountries = setInterval(async () => {
   let response;
@@ -204,7 +204,7 @@ var listener = app.listen(process.env.PORT, function() {
 });
 
 app.get("/all/", async function(req, res) {
-  let all = await getall();
+  let all = await db.fetch("all");
   res.send(all);
 });
 
